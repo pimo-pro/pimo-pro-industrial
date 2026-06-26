@@ -1,0 +1,10 @@
+<IfModule mod_rewrite.c>
+  RewriteEngine On
+  RewriteBase /
+  # API central no VPS (ajustar host se usar subdomínio dedicado)
+  RewriteRule ^api/(.*)$ https://api.industrial.pimo.pro/api/$1 [P,L]
+  # SPA React Router
+  RewriteCond %{REQUEST_FILENAME} !-f
+  RewriteCond %{REQUEST_FILENAME} !-d
+  RewriteRule . /index.html [L]
+</IfModule>
