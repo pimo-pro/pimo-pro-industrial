@@ -1,3 +1,5 @@
+import { centralWebSocketUrl } from '../config/api';
+
 export type RealtimeStatus = 'disconnected' | 'connecting' | 'connected' | 'offline';
 
 export type RealtimeUpdate = {
@@ -16,8 +18,7 @@ let reconnectTimer: ReturnType<typeof setTimeout> | null = null;
 const subscribers = new Map<string, Set<UpdateCallback>>();
 
 function wsUrl(): string {
-  const proto = window.location.protocol === 'https:' ? 'wss:' : 'ws:';
-  return `${proto}//${window.location.host}/ws`;
+  return centralWebSocketUrl();
 }
 
 function notifySubscribers(update: RealtimeUpdate): void {
