@@ -1,11 +1,11 @@
-import { CENTRAL_API_BASE } from '../config/api';
+import { API_URL, CENTRAL_API_BASE } from '../config/api';
 
 const PROFILE_STORAGE = 'pimo-industrial-profile';
 
 export const CENTRAL_API_TOKEN_SUPERVISOR = 'pimo-industrial-dev-token';
 export const CENTRAL_API_TOKEN_OPERATOR = 'pimo-industrial-operator-token';
 
-export { CENTRAL_API_BASE };
+export { API_URL, CENTRAL_API_BASE };
 
 export function getActiveToken(): string {
   const profile = localStorage.getItem(PROFILE_STORAGE);

@@ -1,3 +1,4 @@
+import { INDUSTRIAL_API_BASE } from '@/config/api';
 import { centralFetch } from '@/services/centralApiClient';
 import { applyIndustrialIntelligence } from './intelligencePipeline';
 import { migratePieceJson } from './pieceNormalizer';
@@ -7,8 +8,6 @@ import {
   type SyncDiff,
 } from './syncLayerTypes';
 import type { DataSource, PieceJson, SyncStatus } from '../types/piece';
-
-const LOCAL_BASE = '/api/industrial';
 
 async function localFetch<T>(url: string, init?: RequestInit): Promise<T> {
   const res = await fetch(url, init);
@@ -26,7 +25,7 @@ async function getLocalPiece(
   pieceName: string
 ): Promise<PieceJson> {
   const detail = await localFetch<{ pieceJson: PieceJson }>(
-    `${LOCAL_BASE}/projects/${encodeURIComponent(user)}/${encodeURIComponent(project)}/${encodeURIComponent(box)}/${encodeURIComponent(pieceName)}`
+    `${INDUSTRIAL_API_BASE}/projects/${encodeURIComponent(user)}/${encodeURIComponent(project)}/${encodeURIComponent(box)}/${encodeURIComponent(pieceName)}`
   );
   return detail.pieceJson;
 }
@@ -39,7 +38,7 @@ async function saveLocalPiece(
   piece: PieceJson
 ): Promise<PieceJson> {
   const res = await localFetch<{ pieceJson: PieceJson }>(
-    `${LOCAL_BASE}/projects/${encodeURIComponent(user)}/${encodeURIComponent(project)}/${encodeURIComponent(box)}/${encodeURIComponent(pieceName)}/piece.json`,
+    `${INDUSTRIAL_API_BASE}/projects/${encodeURIComponent(user)}/${encodeURIComponent(project)}/${encodeURIComponent(box)}/${encodeURIComponent(pieceName)}/piece.json`,
     {
       method: 'PUT',
       headers: { 'Content-Type': 'application/json' },

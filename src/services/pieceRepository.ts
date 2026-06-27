@@ -1,9 +1,8 @@
 import type { PieceDetailResponse, PieceJson, ProjectDashboard, QrLookupResult } from '@/types/piece';
+import { INDUSTRIAL_API_BASE } from '@/config/api';
 import { centralFetch } from '@/services/centralApiClient';
 import { bidirectionalSync } from '@/core/syncLayer';
 import { connectWebSocket } from '@/core/realtime';
-
-const LOCAL_BASE = '/api/industrial';
 
 async function fetchJson<T>(url: string, init?: RequestInit): Promise<T> {
   const res = await fetch(url, init);
@@ -28,21 +27,21 @@ export interface PieceRepository {
 
 export const localPieceRepository: PieceRepository = {
   listProjects: () =>
-    fetchJson<{ projects: import('@/types/piece').IndustrialProjectSummary[] }>(`${LOCAL_BASE}/projects`).then(
+    fetchJson<{ projects: import('@/types/piece').IndustrialProjectSummary[] }>(`${INDUSTRIAL_API_BASE}/projects`).then(
       (r) => r.projects
     ),
 
   getProjectDashboard: (user, project) =>
-    fetchJson(`${LOCAL_BASE}/projects/${encodeURIComponent(user)}/${encodeURIComponent(project)}`),
+    fetchJson(`${INDUSTRIAL_API_BASE}/projects/${encodeURIComponent(user)}/${encodeURIComponent(project)}`),
 
   getBoxDetail: (user, project, box) =>
     fetchJson(
-      `${LOCAL_BASE}/projects/${encodeURIComponent(user)}/${encodeURIComponent(project)}/${encodeURIComponent(box)}`
+      `${INDUSTRIAL_API_BASE}/projects/${encodeURIComponent(user)}/${encodeURIComponent(project)}/${encodeURIComponent(box)}`
     ),
 
   getPiece: async (user, project, box, pieceName) => {
     const detail = await fetchJson<PieceDetailResponse>(
-      `${LOCAL_BASE}/projects/${encodeURIComponent(user)}/${encodeURIComponent(project)}/${encodeURIComponent(box)}/${encodeURIComponent(pieceName)}`
+      `${INDUSTRIAL_API_BASE}/projects/${encodeURIComponent(user)}/${encodeURIComponent(project)}/${encodeURIComponent(box)}/${encodeURIComponent(pieceName)}`
     );
     if (detail.pieceJson.qr) {
       try {
@@ -62,7 +61,7 @@ export const localPieceRepository: PieceRepository = {
 
   updatePiece: (user, project, box, pieceName, piece) =>
     fetchJson<{ pieceJson: PieceJson }>(
-      `${LOCAL_BASE}/projects/${encodeURIComponent(user)}/${encodeURIComponent(project)}/${encodeURIComponent(box)}/${encodeURIComponent(pieceName)}/piece.json`,
+      `${INDUSTRIAL_API_BASE}/projects/${encodeURIComponent(user)}/${encodeURIComponent(project)}/${encodeURIComponent(box)}/${encodeURIComponent(pieceName)}/piece.json`,
       {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
@@ -88,7 +87,7 @@ export const localPieceRepository: PieceRepository = {
       const central = await centralFetch<QrLookupResult>(`/lookup/${encodeURIComponent(qrCode)}`);
       return central;
     } catch {
-      return fetchJson(`${LOCAL_BASE}/qr/${encodeURIComponent(qrCode)}`);
+      return fetchJson(`${INDUSTRIAL_API_BASE}/qr/${encodeURIComponent(qrCode)}`);
     }
   },
 

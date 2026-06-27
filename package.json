@@ -7,7 +7,9 @@
     "dev": "vite",
     "build": "tsc -b && vite build",
     "preview": "vite preview",
-    "lint": "tsc -b --noEmit"
+    "lint": "tsc -b --noEmit",
+    "build-industrial": "vite build --config vite.industrial.config.ts",
+    "deploy1": "node scripts/deploy-industrial.mjs"
   },
   "dependencies": {
     "@react-three/drei": "^10.7.7",
@@ -23,6 +25,7 @@
     "@types/react-dom": "^19.2.3",
     "@types/three": "^0.182.0",
     "@vitejs/plugin-react": "^5.1.1",
+    "basic-ftp": "^5.0.5",
     "typescript": "~5.9.3",
     "vite": "^7.2.4"
   }

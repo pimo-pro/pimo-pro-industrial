@@ -3,8 +3,7 @@ import type {
   QualityInspectionPoint,
 } from '@/industrial/quality/types';
 import type { OperationName, PieceJson } from '@/types/piece';
-
-const LOCAL_BASE = '/api/industrial';
+import { INDUSTRIAL_API_BASE } from '@/config/api';
 
 async function postPieceAction<T>(
   user: string,
@@ -14,7 +13,7 @@ async function postPieceAction<T>(
   suffix: string,
   body: unknown
 ): Promise<T> {
-  const url = `${LOCAL_BASE}/projects/${encodeURIComponent(user)}/${encodeURIComponent(project)}/${encodeURIComponent(box)}/${encodeURIComponent(pieceName)}/${suffix}`;
+  const url = `${INDUSTRIAL_API_BASE}/projects/${encodeURIComponent(user)}/${encodeURIComponent(project)}/${encodeURIComponent(box)}/${encodeURIComponent(pieceName)}/${suffix}`;
   const res = await fetch(url, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
@@ -29,7 +28,7 @@ async function postPieceAction<T>(
 
 export function getSupervisorDashboard(user: string, project: string) {
   return fetch(
-    `${LOCAL_BASE}/projects/${encodeURIComponent(user)}/${encodeURIComponent(project)}/supervisor`
+    `${INDUSTRIAL_API_BASE}/projects/${encodeURIComponent(user)}/${encodeURIComponent(project)}/supervisor`
   ).then(async (res) => {
     if (!res.ok) throw new Error(`HTTP ${res.status}`);
     return res.json();
