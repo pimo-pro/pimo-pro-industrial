@@ -1,0 +1,45 @@
+# Deploy SPA Industrial — Hostinger via FTP
+#
+# Secrets (Settings → Secrets and variables → Actions):
+#   HOSTING_FTP_HOST, HOSTING_FTP_USER, HOSTING_FTP_PASS
+
+name: Deploy Industrial SPA
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  deploy:
+    name: Build & deploy SPA to Hostinger
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Build industrial SPA
+        run: npm run build-industrial || npm run build
+
+      - name: Deploy via FTP
+        uses: SamKirkland/FTP-Deploy-Action@v4.3.0
+        with:
+          server: ${{ secrets.HOSTING_FTP_HOST }}
+          username: ${{ secrets.HOSTING_FTP_USER }}
+          password: ${{ secrets.HOSTING_FTP_PASS }}
+          local-dir: publish/industrial/spa/
+          server-dir: public_html/industrial/
