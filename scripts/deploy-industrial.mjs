@@ -55,15 +55,19 @@ async function main() {
   console.log(`Origem: ${BUILD_DIR}`);
   console.log(`Destino FTP: ${FTP_ROOT}`);
 
-  const client = new Client(60_000);
-  client.ftp.verbose = process.env.FTP_VERBOSE === '1';
+  // =========================
+  //  Conexão FTP correta
+  // =========================
+  const client = new Client();
+  client.ftp.verbose = true;
 
   try {
     await client.access({
-      host,
-      user,
-      password,
-      secure: true,
+      host: process.env.HOSTING_FTP_HOST,
+      user: process.env.HOSTING_FTP_USER,
+      password: process.env.HOSTING_FTP_PASS,
+      secure: false,
+      secureOptions: undefined,
     });
     await uploadDirectory(client, BUILD_DIR, FTP_ROOT);
     console.log('Deploy concluído: https://industrial.pimo.pro');
